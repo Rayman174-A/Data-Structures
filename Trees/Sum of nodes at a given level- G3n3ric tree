@@ -1,0 +1,95 @@
+import java.util.*;
+
+class Generic {
+     class Node {
+        int data;
+        ArrayList<Node> children;
+
+        Node(int data) {
+            this.data = data;
+            children = new ArrayList<>();
+        }
+
+    }
+
+   static Node root;
+     int level;
+
+    Generic(Scanner sc) {
+        int sum=0;
+        this.root = buildtree(root, sc);
+        int level=sc.nextInt();
+        sum=sum(level);
+        System.out.println(sum);
+        //display(root);
+    }
+    public void display(Node root)
+    {
+        if(root==null)
+            return;
+        System.out.print(root.data+" ");
+        for(int i=0;i<root.children.size();i++){
+
+            display(root.children.get(i));
+        }
+    }
+    public Node buildtree(Node root, Scanner sc) {
+        int d = sc.nextInt();
+        int numberofchildren = sc.nextInt();
+
+        root = new Node(d);
+
+            for (int i = 0; i < numberofchildren; i++) {
+                root.children.add(buildtree(null, sc));
+            }
+
+        return root;
+
+    }
+
+    public int sum(int k) {
+        int sum = 0;
+        int level=0;
+        int count = 0;
+        int size = 0;
+        if (root==null)
+            return 0;
+
+        Queue<Node> q1 = new LinkedList<>();
+        q1.add(root);
+        while (!q1.isEmpty()) {
+            size = q1.size();
+            while (size-- > 0) {
+                Node newnode = q1.peek();
+                q1.remove();
+                if (level == k) {
+                    count = 1;
+                    sum = sum + newnode.data;
+                } else {
+                    for (int i = 0; i < newnode.children.size(); i++) {
+                        q1.add(newnode.children.get(i));
+                    }
+                }
+
+            }
+            level++;
+            if (count == 1)
+                break;
+
+        }
+        return sum;
+    }
+}
+public class Main {
+    public static void main(String args[]) {
+           int sum=0;
+           int level=0;
+        Scanner sc=new Scanner(System.in);
+        Generic g=new Generic(sc);
+        //int level=sc.nextInt();
+        //Generic g=new Generic(sc);
+
+    }
+}
+
+
