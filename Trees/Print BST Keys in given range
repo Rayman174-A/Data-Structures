@@ -1,0 +1,111 @@
+import java.util.*;
+class Node
+{
+    int data;
+    Node left;
+    Node right;
+    Node(int d)
+    {
+        data=d;
+        left=null;
+        right=null;
+    }
+}
+
+public class Main
+{
+    static Node root=null;
+    public static void addnodes(Node root,int key)
+    {
+        Node node=null;
+        if(key<root.data)
+        {
+            if(root.left==null)
+            {
+                node=new Node(key);
+                root.left=node;
+                return;
+            }
+            else
+                addnodes(root.left,key);
+        }
+
+        if(key>=root.data)
+        {
+            if(root.right==null)
+            {
+                node=new Node(key);
+                root.right=node;
+                return;
+            }
+            else
+                addnodes(root.right,key);
+        }
+    }
+    public static Node buildbst(int a[])
+    {
+        int n=a.length;
+        Node node=new Node(a[0]);
+        for(int i=1;i<n;i++)
+        {
+            addnodes(node,a[i]);
+        }
+        return node;
+    }
+    public static void preorder(Node root)
+    {
+        if(root!=null)
+        {
+            System.out.print(root.data+" ");
+            preorder(root.left);
+            preorder(root.right);
+        }
+    }
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        int t=sc.nextInt();
+        for(int s=0;s<t;s++) {
+            int n = sc.nextInt();
+            int a[] = new int[n];
+            for (int i = 0; i < n; i++) {
+                a[i] = sc.nextInt();
+            }
+
+            root = buildbst(a);
+            int num1=sc.nextInt();
+            int num2=sc.nextInt();
+
+            Arrays.sort(a);
+            int idx1=0;
+            int idx2=0;
+            for(int i=0;i<n;i++)
+            {
+
+                if(a[i]==num1) {
+                    idx1 = i;
+                    break;
+                }
+            }
+            for(int i=0;i<n;i++)
+            {
+
+                if(a[i]==num2) {
+                    idx2 = i;
+
+                }
+            }
+
+            System.out.print("# Preorder : ");
+            preorder(root);
+            System.out.println();
+            System.out.print("# Nodes within range are : ");
+            for(int i=0;i<n;i++)
+            {
+                if(a[i]<=Math.max(num1,num2) && a[i]>=Math.min(num1,num2))
+                System.out.print(a[i]+" ");
+            }
+            System.out.println();
+        }
+
+    }
+}
