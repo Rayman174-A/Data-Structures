@@ -1,0 +1,121 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+class Node
+{
+    int data;
+    int hd;
+    Node left;
+    Node right;
+    Node(int d)
+    {
+        data=d;
+        hd=Integer.MAX_VALUE;
+        left=null;
+        right=null;
+    }
+}
+class BottomTree
+{
+    Node root;
+    BottomTree(Node node)
+    {
+        root=node;
+    }
+    public void bottomview()
+    {
+        if(root==null)
+            return;
+        Queue<Node> q=new LinkedList<>();//for storing level order traversal
+        Map<Integer, Integer> map=new TreeMap<>();
+        int hd=0;
+        root.hd=hd;
+        q.add(root);
+        while(!q.isEmpty())
+        {
+           Node node=q.remove();
+           hd=node.hd;
+           map.put(hd,node.data);
+
+           if(node.left!=null)
+           {
+               node.left.hd=hd-1;
+               q.add(node.left);
+           }
+           if(node.right!=null)
+           {
+               node.right.hd=hd+1;
+               q.add(node.right);
+           }
+        }
+        Set<Map.Entry<Integer, Integer>> set = map.entrySet();
+        Iterator<Map.Entry<Integer, Integer>> iterator = set.iterator();
+        while(iterator.hasNext())
+        {
+            Map.Entry<Integer, Integer> m = iterator.next();
+            System.out.print(m.getValue()+" ");
+        }
+    }
+}
+public class Main {
+       static Node root;
+    public static Node buildTree(ArrayList<Integer> al, Node root, int i)
+    {
+     if(i<al.size())
+     {
+         Node node=new Node(al.get(i));
+         if(node.data!=-1) {
+             root = node;
+             root.left = buildTree(al, root.left, 2 * i + 1);
+             root.right = buildTree(al, root.right, 2 * i + 2);
+         }
+         else
+         {
+             node=null;
+         }
+
+     }
+     return root;
+    }
+    public static void inorder(Node root)
+    {
+        if(root!=null)
+        {
+            inorder(root.left);
+            System.out.print(root.data+" ");
+            inorder(root.right);
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        Scanner sc=new Scanner(System.in);
+        /*while(sc.hasNextInt())
+        al.add(sc.nextInt());
+        Integer[] nums = new  Integer[al.size()];
+        nums = al.toArray(nums);*/
+        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+       /* String readString=sc.nextLine();
+    String str[]=readString.split(" ");
+        List<String> al=new ArrayList<String>();
+        al=Arrays.asList(str);
+        ArrayList<Integer> newList = new ArrayList<Integer>(al.size()) ;
+        for(String s:al)
+        {
+            newList.add(Integer.valueOf(s));
+        }*/
+        StringTokenizer st=new StringTokenizer(br.readLine());
+        //LIST STORED IN THIS ARRAYLIST
+        ArrayList<Integer> lst=new ArrayList<>();
+        for(int i=0;st.hasMoreTokens();i++){
+            lst.add(Integer.parseInt(st.nextToken()));
+        }
+        //System.out.println(lst);
+        root=buildTree(lst,null,0);
+
+        BottomTree tree=new BottomTree(root);
+        tree.bottomview();
+
+
+    }
+}
