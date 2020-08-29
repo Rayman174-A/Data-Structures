@@ -1,0 +1,85 @@
+import java.util.*;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        int a[]=new int[n];
+        for(int i=0;i<n;i++)
+        {
+            a[i]=sc.nextInt();
+        }
+       /* Build b=new Build();
+        b.preorder(b.constructTree(a,0,n-1));*/
+       Build b=new Build(a);
+
+
+    }
+}
+class Build
+{
+    int a[];
+    class Node
+    {
+
+        int data;
+        Node left;
+        Node right;
+        Node(int d)
+        {
+            data=d;
+            left=right=null;
+        }
+    }
+    static Node root;
+    Build(int a[])
+    {
+        this.a=a;
+        root=constructTree(a,0,a.length-1);
+        sum(root,a);
+    }
+    public Node constructTree(int a[],int start,int end)
+    {
+        if(start>end)
+            return null;
+        int n=a.length;
+        int mid=(start+end)/2;
+        Node node=new Node(a[mid]);
+        node.left=constructTree(a,start,mid-1);
+        node.right=constructTree(a,mid+1,end);
+        return node;
+    }
+    public void inorder(Node root)
+    {
+        if(root!=null)
+        {
+            inorder(root.left);
+            System.out.print(root.data+" ");
+
+            inorder(root.right);
+        }
+    }
+    public void preorder(Node root)
+    {
+        if(root!=null)
+        {
+            System.out.print(root.data+" ");
+            preorder(root.left);
+            preorder(root.right);
+        }
+    }
+    public void sum(Node root,int a[])
+    {
+        int b[]=new int[a.length];
+        int sum=0;
+        for(int i=a.length-1;i>=0;i--)
+        {
+            sum=sum+a[i];
+            b[i]=sum;
+        }
+        root=constructTree(b,0,b.length-1);
+        preorder(root);
+    }
+}
