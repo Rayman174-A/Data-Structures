@@ -1,38 +1,38 @@
 import java.util.Arrays;
 import java.util.Scanner;
 class Node
+{
+    int data;
+    Node left;
+    Node right;
+    Node(int d)
     {
-        int data;
-        Node left;
-        Node right;
-        Node(int d)
-        {
-            data=d;
-            left=right=null;
-        }
+        data=d;
+        left=right=null;
     }
+}
 
 public class Main {
     //static Node root;
     public static Node construct(Node node,int data)
     {
-       if(node==null)
-       {
-           Node f=new Node(data);
-           return f;
-       }
-       else
-       {
-           if(data<node.data)
-           {
-               node.left=construct(node.left,data);
-           }
-           else
-           {
-               node.right=construct(node.right,data);
-           }
-           return node;
-       }
+        if(node==null)
+        {
+            Node f=new Node(data);
+            return f;
+        }
+        else
+        {
+            if(data<node.data)
+            {
+                node.left=construct(node.left,data);
+            }
+            else
+            {
+                node.right=construct(node.right,data);
+            }
+            return node;
+        }
     }
     public static void preorder(Node root)
     {
@@ -44,15 +44,16 @@ public class Main {
             preorder(root.right);
         }
     }
-    public static int maximumofleftsubtree(Node root)
+    public static int minimumofrightsubtree(Node root)
     {
-      if(root.left==null)
-          return root.data;
-      return maximumofleftsubtree(root.left);
+        if(root.left==null)
+            return root.data;
+        return minimumofrightsubtree(root.left);
     }
     public static void remove(int item, Node parent, Node node,Boolean iloc)
     {
         //Locate the item
+
         if(node==null)
         {
             return;
@@ -61,12 +62,12 @@ public class Main {
         {
             remove(item,node,node.left,true);
         }
-       else if(item>node.data)
+        else if(item>node.data)
         {
             remove(item,node,node.right,iloc=false);
         }
-       //item=node.data
-       else
+        //item=node.data
+        else
         {
 
             //CAse-1 node.left==null and root.right==null
@@ -112,36 +113,46 @@ public class Main {
             //CAse 4- node.left!=null and node.right!=null
             else
             {
-                int max=maximumofleftsubtree(node.right);
-                node.data=max;
-                remove(max,node,node.left,true);
+                int min=minimumofrightsubtree(node.right);
+                node.data=min;
+                remove(min,node,node.right,false);
             }
         }
     }
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
-        int n=sc.nextInt();
-        int a[]=new int[n];
-        for(int i=0;i<n;i++)
+        int t=sc.nextInt();
+        for(int f=0;f<t;f++)
         {
-            a[i]=sc.nextInt();
+            int n=sc.nextInt();
+            int a[]=new int[n];
+            for(int i=0;i<n;i++)
+            {
+                a[i]=sc.nextInt();
+            }
+            Node root=null;
+            root=construct(root,a[0]);
+            for(int i=1;i<n;i++)
+            {
+                root=construct(root,a[i]);
+            }
+            int s=sc.nextInt();
+            int b[]=new int[s];
+            for(int i=0;i<s;i++)
+            {
+                b[i]=sc.nextInt();
+            }
+            if(a.length==1 && b.length==1)
+            {
+                if(a[0]==b[0])
+                    return;
+            }
+            for(int i=0;i<s;i++)
+                remove(b[i],null,root,false);
+            preorder(root);
+            System.out.println();
         }
-        Node root=null;
-        root=construct(root,a[0]);
-        for(int i=1;i<n;i++)
-        {
-            root=construct(root,a[i]);
-        }
-        int s=sc.nextInt();
-        int b[]=new int[s];
-        for(int i=0;i<s;i++)
-        {
-            b[i]=sc.nextInt();
-        }
-        for(int i=0;i<s;i++)
-        remove(b[i],null,root,false);
-        preorder(root);
-
 
     }
+
 }
