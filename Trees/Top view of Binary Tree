@@ -1,0 +1,83 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+class Main
+{
+    static class Node
+    {
+        int data;
+        Node left;
+        Node right;
+        public Node(int d)
+        {
+            data=d;
+            left=null;
+            right=null;
+        }
+    }
+    static Node root;
+    static Node buildtree(int a[],Node root, int i)
+    {
+
+            if (i < a.length) {
+                Node node = new Node(a[i]);
+                root = node;
+                root.left = buildtree(a, root.left, 2 * i + 1);
+                root.right = buildtree(a, root.right, 2 * i + 2);
+
+            }
+
+        return root;
+    }
+    public static void preorder(Node root)
+    {
+        if(root!=null)
+        {
+            System.out.print(root.data+" ");
+            preorder(root.left);
+            preorder(root.right);
+        }
+    }
+    public static void getverticalorder(Node root,int hd, TreeMap<Integer, Vector<Integer>> tree)
+    {
+        if(root==null)
+        {
+            return;
+        }
+        Vector<Integer> get=tree.get(hd);
+        if(get==null)
+        {
+            get=new Vector<>();
+            get.add(root.data);
+        }
+        else
+        {
+            get.add(root.data);
+        }
+        tree.put(hd,get);
+        getverticalorder(root.left,hd-1,tree);
+        getverticalorder(root.right,hd+1,tree);
+
+    }
+    public static void printverticalorder(Node root)
+    {
+        int hd=0;
+        TreeMap<Integer,Vector<Integer>> tree=new TreeMap<>();
+        getverticalorder(root,hd,tree);
+        for(Map.Entry<Integer,Vector<Integer>> entry:tree.entrySet())
+        {
+            System.out.print(entry.getValue().firstElement()+" ");//returns the first element of the every vector corresponding to hd
+        }
+    }
+    public static void main(String[] args)
+    {
+       Scanner sc=new Scanner(System.in);
+
+        int a[]=new int[]{1,2,3,4,5,6};
+        root=buildtree(a,root,0);
+        //preorder(root);
+        //System.out.println();
+        printverticalorder(root);
+    }
+}
