@@ -1,158 +1,143 @@
 import java.util.Arrays;
 import java.util.Scanner;
-class Node
-{
-    int data;
-    Node left;
-    Node right;
-    Node(int d)
-    {
-        data=d;
-        left=right=null;
-    }
+
+class Node {
+	int data;
+	Node left;
+	Node right;
+
+	Node(int d) {
+		data = d;
+		left = right = null;
+	}
 }
 
 public class Main {
-    //static Node root;
-    public static Node construct(Node node,int data)
-    {
-        if(node==null)
-        {
-            Node f=new Node(data);
-            return f;
-        }
-        else
-        {
-            if(data<node.data)
-            {
-                node.left=construct(node.left,data);
-            }
-            else
-            {
-                node.right=construct(node.right,data);
-            }
-            return node;
-        }
-    }
-    public static void preorder(Node root)
-    {
-        if(root!=null)
-        {
-            System.out.print(root.data+" ");
-            preorder(root.left);
+	private static Node root = null; //added.
 
-            preorder(root.right);
-        }
-    }
-    public static int minimumofrightsubtree(Node root)
-    {
-        if(root.left==null)
-            return root.data;
-        return minimumofrightsubtree(root.left);
-    }
-    public static void remove(int item, Node parent, Node node,Boolean iloc)
-    {
-        //Locate the item
+	// static Node root;
+	public static Node construct(Node node, int data) {
+		if (node == null) {
+			Node f = new Node(data);
+			return f;
+		} else {
+			if (data < node.data) {
+				node.left = construct(node.left, data);
+			} else {
+				node.right = construct(node.right, data);
+			}
+			return node;
+		}
+	}
 
-        if(node==null)
-        {
-            return;
-        }
-        if(item<node.data)
-        {
-            remove(item,node,node.left,true);
-        }
-        else if(item>node.data)
-        {
-            remove(item,node,node.right,iloc=false);
-        }
-        //item=node.data
-        else
-        {
+	public static void preorder(Node root) {
+		if (root != null) {
+			System.out.print(root.data + " ");
+			preorder(root.left);
 
-            //CAse-1 node.left==null and root.right==null
+			preorder(root.right);
+		}
+	}
 
-            if(node.left==null && node.right==null)
-            {
-                if(iloc==false)
-                {
-                    parent.right=null;
-                }
-                else
-                {
-                    parent.left=null;
-                }
-            }
+	public static int minimumofrightsubtree(Node root) {
+		if (root.left == null)
+			return root.data;
+		return minimumofrightsubtree(root.left);
+	}
 
-            //Case2- node.left==null and node.right!=null
-            else if(node.left==null && node.right!=null)
-            {
-                if(iloc==false)
-                {
-                    parent.right=node.right;
-                }
-                else
-                {
-                    parent.left=node.right;
-                }
-            }
+	public static void remove(int item, Node parent, Node node, Boolean iloc) {
+		// Locate the item
 
-            //Case 3- node.right==null and node.left!=null
-            else if(node.right==null && node.left!=null)
-            {
-                if(iloc==false)
-                {
-                    parent.right=node.left;
-                }
-                else
-                {
-                    parent.left=node.left;
-                }
-            }
+		if (node == null) {
+			return;
+		}
+		if (item < node.data) {
+			remove(item, node, node.left, true);
+		} else if (item > node.data) {
+			remove(item, node, node.right, false);
+		}
+		// item=node.data
+		else {
 
-            //CAse 4- node.left!=null and node.right!=null
-            else
-            {
-                int min=minimumofrightsubtree(node.right);
-                node.data=min;
-                remove(min,node,node.right,false);
-            }
-        }
-    }
-    public static void main(String[] args) {
-        Scanner sc=new Scanner(System.in);
-        int t=sc.nextInt();
-        for(int f=0;f<t;f++)
-        {
-            int n=sc.nextInt();
-            int a[]=new int[n];
-            for(int i=0;i<n;i++)
-            {
-                a[i]=sc.nextInt();
-            }
-            Node root=null;
-            root=construct(root,a[0]);
-            for(int i=1;i<n;i++)
-            {
-                root=construct(root,a[i]);
-            }
-            int s=sc.nextInt();
-            int b[]=new int[s];
-            for(int i=0;i<s;i++)
-            {
-                b[i]=sc.nextInt();
-            }
-            if(a.length==1 && b.length==1)
-            {
-                if(a[0]==b[0])
-                    return;
-            }
-            for(int i=0;i<s;i++)
-                remove(b[i],null,root,false);
-            preorder(root);
-            System.out.println();
-        }
+			// CAse-1 node.left==null and root.right==null
 
-    }
+			if (node.left == null && node.right == null) {
+				if (iloc == false) {
+					parent.right = null;
+				} else {
+					parent.left = null;
+				}
+			}
+
+			// Case2- node.left==null and node.right!=null
+			else if (node.left == null && node.right != null) {
+				if (iloc == false) {
+					if (parent == null) {// added
+						root = node.right;// added
+						return;// added
+					}
+					parent.right = node.right;
+				} else {
+					if (parent == null) {// added
+						root = node.right;// added
+						return;// added
+					}
+					parent.left = node.right;
+				}
+			}
+
+			// Case 3- node.right==null and node.left!=null
+			else if (node.right == null && node.left != null) {
+				if (iloc == false) {
+					if (parent == null) {// added
+						root = node.left;// added
+						return;// added
+					}
+					parent.right = node.left;
+				} else {
+					if (parent == null) {// added
+						root = node.left;// added
+						return;// added
+					}
+					parent.left = node.left;
+				}
+			}
+
+			// CAse 4- node.left!=null and node.right!=null
+			else {
+				int min = minimumofrightsubtree(node.right);
+				node.data = min;
+				remove(min, node, node.right, false);
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		for (int f = 0; f < t; f++) {
+			int n = sc.nextInt();
+			int a[] = new int[n];
+			for (int i = 0; i < n; i++) {
+				a[i] = sc.nextInt();
+			}
+			root =null; //reset root.
+			root = construct(root, a[0]);
+			for (int i = 1; i < n; i++) {
+				root = construct(root, a[i]);
+			}
+			int s = sc.nextInt();
+			int b[] = new int[s];
+			for (int i = 0; i < s; i++) {
+				b[i] = sc.nextInt();
+			}
+
+			for (int i = 0; i < s; i++)
+				remove(b[i], null, root, false);
+			preorder(root);
+			System.out.println();
+		}
+
+	}
 
 }
