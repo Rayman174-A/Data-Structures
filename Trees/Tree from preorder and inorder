@@ -1,0 +1,63 @@
+import java.util.*;
+
+public class Main {
+    static class Node {
+        int data;
+        Node left;
+        Node right;
+
+        public Node(int d) {
+            data = d;
+            left = null;
+            right = null;
+        }
+    }
+    static Node root;
+    static Scanner sc=new Scanner(System.in);
+    public static void main(String[] args) {
+        Main m=new Main();
+        int pre[]=takeInput();
+        int in[]=takeInput();
+        root=construct(pre,in,0,pre.length-1);
+        inorder(root);
+    }
+    public static int[] takeInput()
+    {
+        int n=sc.nextInt();
+        int a[]=new int[n];
+        for(int i=0;i<n;i++)
+        {
+            a[i]=sc.nextInt();
+        }
+        return a;
+    }
+    static int i=0;
+    static int x;
+      static Node construct(int pre[],int in[],int start,int end)
+      {
+          if(start>end)
+              return null;
+          Node n=new Node(pre[i++]);
+          if(start==end)
+              return n;
+          for(int s=start;s<=end;s++)
+          {
+              if(in[s]==n.data)
+                  x=i;
+          }
+          n.left=construct(pre,in,start,x-1);
+          n.right=construct(pre,in,x+1,end);
+          return n;
+      }
+       static void inorder(Node root)
+        {
+            if(root==null)
+                return ;
+            inorder(root.left);
+            System.out.print(root.data+" ");
+            inorder(root.right);
+        }
+    }
+
+
+
