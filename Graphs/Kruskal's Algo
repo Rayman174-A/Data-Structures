@@ -1,0 +1,89 @@
+ public class DisjointSet {
+        private class Node {
+            String data;
+            Node parent;
+            int rank;
+        }
+
+        HashMap<String, Node> map = new HashMap<>();
+
+        public void create(String value) {
+            Node nn = new Node();
+            nn.data = value;
+            nn.rank = 0;
+            nn.parent = nn;
+            map.put(value, nn);
+        }
+
+        public void union(String value1, String value2) {
+            Node n1 = map.get(value1);
+            Node n2 = map.get(value2);
+            Node re1 = find(n1);// representative element 1
+            Node re2 = find(n2);// representative element 2
+            if (re1.data.equals(re2.data))
+                return;
+            else {
+                if (re1.rank == re2.rank) {
+                    re2.parent = re1;
+                    re1.rank = re1.rank + 1;
+                } else if (re1.rank > re2.rank) {
+                    re2.parent = re1;
+                } else {
+                    re1.parent = re2;
+                }
+            }
+        }
+
+        public String find(String value) {
+            return find(map.get(value)).data;
+        }
+
+        private Node find(Node node) {
+            if (node == node.parent)
+                return node;
+            Node rr = find(node.parent);
+            // node.parent=rr;
+            return rr;
+
+        }
+    }
+
+        private class EdgePair implements Comparable<EdgePair>
+        {
+            String v1;
+            String v2;
+            int cost;
+
+            public int compareTo(EdgePair o)
+            {
+                return this.cost-o.cost;
+            }
+            public String toString()
+            {
+                return v1+"-"+v2+":"+cost;
+            }
+        }
+        public ArrayList<EdgePair> getAllEdges()
+        {
+            ArrayList<EdgePair> edges=new ArrayList<>();
+            for(String vname: vtces.keySet())
+            {
+                Vertex vtx=vtces.get(vname);
+                for(String nbr: vtx.nbrs.keySet())
+                {
+                    EdgePair ep=new EdgePair();
+                    ep.v1=vname;
+                    ep.v2=nbr;
+                    ep.cost=vtx.nbrs.get(nbr);
+                    edges.add(ep);
+                }
+            }
+            return edges;
+        }
+        public void kruskal()
+        {
+           //1. Sort in increasing order
+            ArrayList<EdgePair> edges=getAllEdges();
+            Collections.sort(edges);// make class implement comparable
+            System.out.println(edges);
+        }
