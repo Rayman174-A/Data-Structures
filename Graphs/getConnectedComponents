@@ -1,0 +1,48 @@
+ public ArrayList<ArrayList<String>> getConnectedComponents() {
+        ArrayList<ArrayList<String>> ans = new ArrayList<>();
+        HashMap<String, Boolean> processed = new HashMap<>();
+        LinkedList<Pair> queue = new LinkedList<>();
+        //creating a new pair
+
+        ArrayList<String> keys = new ArrayList<>(vtces.keySet());
+        for (String key : keys) {
+            if (processed.containsKey(key)) {
+                continue;
+            }
+            ArrayList<String> subans = new ArrayList<>();
+            Pair sp = new Pair();
+            sp.vname = key;
+            sp.psf = key;
+
+            //put new pair in queue
+            queue.addLast(sp);
+            while (!queue.isEmpty()) {
+                Pair rp = queue.removeFirst();
+                if (processed.containsKey(rp.vname)) {
+
+                    continue;
+                }
+                // Put in processed hashmap
+                processed.put(rp.vname, true);
+
+                //put in subans arraylist
+                subans.add(rp.vname);
+                //nbrs
+                ArrayList<String> v = new ArrayList<>(vtces.get(rp.vname).nbrs.keySet());
+                for (String k : v) {
+                    // if key is not present in processed hashmap, only then add
+                    if (!processed.containsKey(k)) {
+                        Pair np = new Pair();
+                        np.vname = k;
+                        np.psf = rp.psf + k;
+                        queue.add(np);
+                    }
+                }
+            }
+            //put in final arraylist
+            ans.add(subans);
+
+        }
+        return ans;
+    }
+
