@@ -1,0 +1,29 @@
+public HashMap<String,Integer> bellmanford(String src)
+        {
+            ArrayList<EdgePair> edges=getAllEdges();
+            HashMap<String,Integer> map=new HashMap<>();
+            int value=100000;
+            for(String vname: vtces.keySet())
+            {
+                map.put(vname,value);
+                if(src==vname)
+                    map.put(vname,0);
+
+            }
+            int V=vtces.size()-1;
+            for(int i=1;i<V;i++)
+            {
+                for(EdgePair edge: edges)
+                {
+                    int oc=map.get(edge.v2);
+                    int nc=map.get(edge.v1)+edge.cost;
+                    if(oc>nc) {
+                        if(i<=V-1)
+                        map.put(edge.v2, nc);
+                        else
+                            System.out.println("Negative weight cycle is present");
+                    }
+                }
+            }
+            return map;
+        }
