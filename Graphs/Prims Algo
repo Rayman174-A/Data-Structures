@@ -1,0 +1,60 @@
+private class PrimsPair implements Comparable<PrimsPair> {
+        String vname;
+        String acqvname;
+        int cost;
+
+        public int compareTo(PrimsPair o) {
+            return o.cost - this.cost;
+        }
+    }
+
+    public GraphStructure prims() {
+        GraphStructure mst = new GraphStructure();
+        HashMap<String, PrimsPair> map = new HashMap<>();
+        GenericHeap<PrimsPair> heap = new GenericHeap<PrimsPair>();
+        // make a pair and put in heap and map
+        for (String key : vtces.keySet()) {
+            PrimsPair np = new PrimsPair();
+            np.vname = key;
+            np.acqvname = null;
+            np.cost = Integer.MAX_VALUE;//initially take it infinity
+
+            // Step 1- add in heap
+            heap.add(np);
+            map.put(key, np);
+        }
+
+
+        //Step 2- Do the work until heap is not empty, keep on removing pairs
+        while (!heap.isEmpty()) {
+            // remove a pair from heap
+            PrimsPair rp = heap.remove();
+            // remove pair from hashmap
+            map.remove(rp.vname);
+            // add vertex to minimum spanning tree
+            if (rp.acqvname == null)// for initial vertex
+            {
+                mst.addVertex(rp.vname);
+            } else {
+                mst.addVertex(rp.vname);
+                mst.addEdge(rp.vname, rp.acqvname, rp.cost);
+            }
+            //nbrs
+            for (String nbr : vtces.get(rp.vname).nbrs.keySet()) {
+                if (map.containsKey(nbr)) {
+                    int oc = map.get(nbr).cost;//old cost
+                    int nc = vtces.get(rp.vname).nbrs.get(nbr);//new cost
+                    // update the pair only when new cost is less than old cost
+                    if (nc < oc) {
+                        PrimsPair gp = map.get(nbr);// get pair
+                        gp.acqvname = rp.vname;
+                        gp.cost = nc;
+                        heap.updatePriority(gp);
+                    }
+                }
+            }
+
+        }
+
+        return mst;
+    }
