@@ -1,0 +1,20 @@
+ public Boolean hasPath(String vname1, String vname2, HashMap<String, Boolean> processed) {
+        Vertex vtx1 = vtces.get(vname1);
+        processed.put(vname1, true);
+        if (containsEdges(vname1, vname2))
+            return true;
+        else {
+            ArrayList<String> keys = new ArrayList<>(vtx1.nbrs.keySet());
+            /*if(keys.contains(vname1))
+            {
+                vtx1.nbrs.remove(vname1);
+            }*/
+
+
+            for (String key : keys) {
+                if (processed.containsKey(key) == false && hasPath(key, vname2, processed))
+                    return true;
+            }
+        }
+        return false;
+    }
