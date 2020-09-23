@@ -1,0 +1,48 @@
+public Boolean isConnected() {
+        int flag = 0;
+        HashMap<String, Boolean> processed = new HashMap<>();
+        LinkedList<Pair> queue = new LinkedList<>();
+        //creating a new pair
+
+        ArrayList<String> keys = new ArrayList<>(vtces.keySet());
+        for (String key : keys) {
+            if (processed.containsKey(key)) {
+                continue;
+            }
+            flag++;
+            Pair sp = new Pair();
+            sp.vname = key;
+            sp.psf = key;
+
+            //put new pair in queue
+            queue.addLast(sp);
+            while (!queue.isEmpty()) {
+                Pair rp = queue.removeFirst();
+                if (processed.containsKey(rp.vname)) {
+
+                    continue;
+                }
+                // Put in processed hashmap
+                processed.put(rp.vname, true);
+
+                //check for direct edge
+                System.out.println(rp.vname + " via " + rp.psf);
+                //nbrs
+                ArrayList<String> v = new ArrayList<>(vtces.get(rp.vname).nbrs.keySet());
+                for (String k : v) {
+                    // if key is not present in processed hashmap, only then add
+                    if (!processed.containsKey(k)) {
+                        Pair np = new Pair();
+                        np.vname = k;
+                        np.psf = rp.psf + k;
+                        queue.add(np);
+                    }
+                }
+            }
+
+        }
+        if (flag > 1)
+            return false;
+        else
+            return true;
+    }
