@@ -1,0 +1,44 @@
+private class Pair {
+        String vname;
+        String psf;//path so far
+
+    }
+
+    public boolean bfs(String src, String dst) {
+        HashMap<String, Boolean> processed = new HashMap<>();
+        LinkedList<Pair> queue = new LinkedList<>();
+        //creating a new pair
+        Pair sp = new Pair();
+        sp.vname = src;
+        sp.psf = src;
+
+        //put new pair in queue
+        queue.addLast(sp);
+        while (!queue.isEmpty()) {
+            Pair rp = queue.removeFirst();
+            if (processed.containsKey(rp.vname)) {
+
+                continue;
+            }
+            // Put in processed hashmap
+            processed.put(rp.vname, true);
+
+            //check for direct edge
+            if (containsEdges(rp.vname, dst)) {
+                System.out.println(rp.psf + dst);
+                return true;
+            }
+            //nbrs
+            ArrayList<String> v = new ArrayList<>(vtces.get(rp.vname).nbrs.keySet());
+            for (String key : v) {
+                // if key is not present in processed hashmap, only then add
+                if (!processed.containsKey(key)) {
+                    Pair np = new Pair();
+                    np.vname = key;
+                    np.psf = rp.psf + key;
+                    queue.add(np);
+                }
+            }
+        }
+        return false;
+    }
