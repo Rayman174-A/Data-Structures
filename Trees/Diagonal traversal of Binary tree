@@ -1,0 +1,58 @@
+import java.util.*;
+
+class Node
+{
+    int data;
+    Node left=null;
+    Node right=null;
+    public Node(int data)
+    {
+        this.data=data;
+    }
+
+}
+public class Main {
+    public static void diagonalprocess(Node root, int d,HashMap<Integer,Vector<Integer>> map)
+    {
+        if(root==null)
+            return;
+        Vector<Integer> f=map.get(d);
+        if(f==null)
+        {
+            f=new Vector<>();
+            f.add(root.data);
+        }
+        else
+            f.add(root.data);
+        map.put(d,f);
+        diagonalprocess(root.left,d+1,map);
+        diagonalprocess(root.right,d,map);
+
+
+    }
+    public static void diagonalPrint(Node root)
+    {
+        if(root==null)
+            return;
+        HashMap<Integer,Vector<Integer>> map=new HashMap<>();
+        diagonalprocess(root,0,map);
+        System.out.println("The diagonal print of the binary tree is:-");
+        for(Map.Entry<Integer,Vector<Integer>> key: map.entrySet())
+        {
+            System.out.println(key.getValue());
+        }
+    }
+    public static void main(String[] args) {
+        Node root = new Node(8);
+        root.left = new Node(3);
+        root.right = new Node(10);
+        root.left.left = new Node(1);
+        root.left.right = new Node(6);
+        root.right.right = new Node(14);
+        root.right.right.left = new Node(13);
+        root.left.right.left = new Node(4);
+        root.left.right.right = new Node(7);
+
+        diagonalPrint(root);
+    }
+}
