@@ -1,0 +1,42 @@
+class GfG
+{
+    static Node root;
+  static void createNode(int arr[], int i, Node create[])  
+    { 
+       
+        if (create[i] != null) 
+            return; 
+        create[i] = new Node(i); 
+        if (arr[i] == -1)  
+        { 
+            root = create[i]; 
+            return; 
+        } 
+   
+        if (create[arr[i]] == null) 
+            createNode(arr,arr[i],create); 
+   
+        // Find parent pointer 
+        Node p = create[arr[i]]; 
+  
+        if (p.left == null) 
+            p.left = create[i]; 
+        else 
+            p.right = create[i]; 
+    } 
+    public static Node createTree(int arr[], int n)
+    {
+       Node node[]=new Node[n];
+       for(int i=0;i<n;i++)
+       {
+           node[i]=null;
+       }
+       for(int i=0;i<n;i++)
+       createNode(arr,i,node);
+       
+       return root;
+       
+    }
+    
+}
+
