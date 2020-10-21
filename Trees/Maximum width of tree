@@ -1,0 +1,49 @@
+class Tree
+{
+    // /* Function to get the maximum width of a binary tree*/
+    int height(Node root)
+    {
+        if(root==null)
+        return 0;
+        int lh=height(root.left);
+        int rh=height(root.right);
+        if(lh>rh)
+        return lh+1;
+        else
+        return rh+1;
+    
+    }
+  
+    ArrayList<Integer> levelorder(Node root,int level,ArrayList<Integer> al)
+    {
+        ArrayList<Integer> ab=new ArrayList<>();
+        if(root==null)
+        return ab;
+        if(level==1)
+        al.add(root.data);
+        else if(level>1)
+        {
+        levelorder(root.left,level-1,al);
+        levelorder(root.right,level-1,al);
+        }
+        return al;
+    }
+    int getMaxWidth(Node root)
+    {
+        int h=height(root);
+        ArrayList<Integer> a=new ArrayList<>();
+        ArrayList<Integer> alr=new ArrayList<>();
+        int size=0;
+        int max=0;
+        for(int i=1;i<=h;i++)
+        {
+            alr=levelorder(root,i,a);
+            size=alr.size();
+            if(size>max)
+            max=size;
+            alr=new ArrayList<>();
+            a=new ArrayList<>();
+        }
+        return max;
+    }		
+}
