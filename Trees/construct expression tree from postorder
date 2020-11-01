@@ -1,0 +1,34 @@
+class GfG
+{
+    
+    public static Node constructTree(char postfix[])
+    {
+        Stack<Node> st = new Stack<Node>(); 
+        Node t, t1, t2;
+        Construct obj = new Construct(); 
+        for(int i=0;i<postfix.length;i++)
+        {
+            if(!obj.isOperator(postfix[i]))
+            {
+                t=new Node(postfix[i]);
+                st.push(t);
+            }
+            else
+            {
+                t=new Node(postfix[i]);
+                t1=st.peek();
+                st.pop();
+                t2=st.peek();
+                st.pop();
+                t.left=t1;
+                t.right=t2;
+                st.push(t);
+            }
+        }
+        t=st.peek();
+        st.pop();
+        return t;
+        
+    }
+    
+}
