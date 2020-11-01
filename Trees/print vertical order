@@ -1,0 +1,47 @@
+class BinaryTree
+{
+    static void getVerticalOrder(Node root, int hd,
+                                TreeMap<Integer,Vector<Integer>> m)
+    {
+        if(root == null)
+            return;
+        
+        Vector<Integer> get =  m.get(hd);
+       
+        if(get == null)
+        {
+            get = new Vector<>();
+            get.add(root.data);
+        }
+        else
+            get.add(root.data);
+         
+        m.put(hd, get);
+        getVerticalOrder(root.left, hd-1, m);
+   
+        getVerticalOrder(root.right, hd+1, m);
+    }
+    static ArrayList <Integer> verticalOrder(Node root)
+    {
+        ArrayList<Vector<Integer>>al=new ArrayList<>();
+        //al.add(0);
+        ArrayList<Integer> arl=new ArrayList<>();
+       TreeMap<Integer,Vector<Integer>> m=new TreeMap<>();
+       int hd=0;
+       getVerticalOrder(root,hd,m);
+       Vector<Integer>v=new Vector<>();
+       for(Map.Entry<Integer,Vector<Integer>> entry: m.entrySet())
+       {
+           
+           al.add(entry.getValue());
+           
+       }
+       for(int i=0;i<al.size();i++)
+       {
+         v=al.get(i);
+         for(int j=0;j<v.size();j++)
+         arl.add(v.get(j));
+       }
+       return arl;
+    }
+}
