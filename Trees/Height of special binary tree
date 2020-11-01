@@ -1,0 +1,26 @@
+Given a special Binary Tree whose leaf nodes are connected to form a circular doubly linked list. Find the height of this special Binary Tree.
+
+class Tree
+{
+    // Return the height of the given special binary tree
+    public static boolean isLeaf(Node node)
+    {
+        return (node.left != null && node.left.right == node
+                && node.right != null
+                && node.right.left == node);
+    }
+    public static int findTreeHeight(Node root)
+        {
+            if(root==null)
+            return 0;
+           if(isLeaf(root))
+           return 1;
+          int lh=findTreeHeight(root.left);
+          int rh=findTreeHeight(root.right);
+          if(lh>rh)
+          return lh+1;
+          else
+          return rh+1;
+           
+        }
+}
